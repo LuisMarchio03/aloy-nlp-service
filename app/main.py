@@ -1,4 +1,6 @@
+# app/main.py
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import StreamingResponse # Importante adicionar isso
 from pydantic import BaseModel
 from typing import Dict, Any
 from app.services.llm_engine import GemmaEngine
@@ -9,6 +11,7 @@ engine = GemmaEngine(model_name="gemma:2b")
 # ---- Schemas de Entrada ----
 class ChatRequest(BaseModel):
     message: str
+    session_id: str = "default" # Permite múltiplas conversas simultâneas
 
 class IntentRequest(BaseModel):
     text: str
@@ -26,13 +29,12 @@ async def check_status():
 
 @app.post("/v1/nlp/chat", tags=["NLP"])
 async def chat_endpoint(request: ChatRequest):
-    try:
-        reply = await engine.chat(request.message)
-        return {"response": reply}
-    except Exception:
-        raise HTTPException(status_code=500, detail="Erro ao processar a mensagem.")
+    # Usamos o StreamingResponse para retornar os dados conforme são gerados
+    return StreamingResponse(
+        engine.chat_stream(request.message, request.session_id),
+        media_type="text/plain"
+    )
 
-# Note que adicionamos o response_model aqui
 @app.post("/v1/nlp/intent", response_model=IntentResponse, tags=["NLP"])
 async def intent_endpoint(request: IntentRequest):
     try:

@@ -13,10 +13,47 @@ class GemmaEngine:
     def __init__(self, model_name: str = "gemma:2b"):
         self.model_name = model_name
         self.client = AsyncClient()
+        # Dicionário em memória para guardar o histórico: { "session_id": [mensagens] }
+        self.memory = {}
 
-    async def chat(self, user_message: str) -> str:
-        # ... (código do chat continua igual)
-        pass
+    async def chat_stream(self, user_message: str, session_id: str = "default"):
+        """Gera uma resposta em linguagem natural com streaming e memória."""
+        
+        # 1. Inicializa a memória da sessão se não existir
+        if session_id not in self.memory:
+            self.memory[session_id] = [
+                {'role': 'system', 'content': 'Você é o ALOY, um assistente virtual inteligente, educado e prestativo. Responda de forma concisa.'}
+            ]
+
+        # 2. Adiciona a nova mensagem do usuário ao histórico
+        self.memory[session_id].append({'role': 'user', 'content': user_message})
+
+        try:
+            # 3. Chama o Ollama com stream=True
+            response_stream = await self.client.chat(
+                model=self.model_name,
+                messages=self.memory[session_id],
+                stream=True
+            )
+
+            full_response = ""
+            
+            # 4. Entrega os pedaços da resposta (chunks) em tempo real
+            async for chunk in response_stream:
+                content = chunk['message']['content']
+                full_response += content
+                yield content
+
+            # 5. Salva a resposta completa do assistente na memória para dar contexto futuro
+            self.memory[session_id].append({'role': 'assistant', 'content': full_response})
+
+            # 6. Otimização: Limita o histórico para não estourar a janela de contexto (mantém as últimas 10 mensagens + system prompt)
+            if len(self.memory[session_id]) > 11:
+                self.memory[session_id] = [self.memory[session_id][0]] + self.memory[session_id][-10:]
+
+        except Exception as e:
+            logger.error(f"Erro na comunicação com Ollama: {e}")
+            yield "Desculpe, ocorreu um erro ao processar sua mensagem."
 
     async def extract_intent(self, user_message: str) -> dict:
         """Analisa a frase e extrai a intenção, adicionando metadados."""
