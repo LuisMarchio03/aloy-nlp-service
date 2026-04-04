@@ -56,10 +56,11 @@ class GemmaEngine:
             yield "Desculpe, ocorreu um erro ao processar sua mensagem."
 
     async def extract_intent(self, user_message: str) -> dict:
-        """Analisa a frase e extrai a intenção, adicionando metadados."""
+        """Analisa a frase e extrai a intenção e as entidades no formato JSON."""
         
         intents_str = ", ".join([f'"{intent}"' for intent in AVAILABLE_INTENTS])
         
+        # Prompt atualizado para extração de Entidades (NER)
         system_prompt = f"""
         Você é o cérebro cognitivo do assistente ALOY.
         Sua única tarefa é analisar a mensagem do usuário e retornar APENAS um objeto JSON.
@@ -67,14 +68,34 @@ class GemmaEngine:
         
         As intenções possíveis são: {intents_str}.
         
-        Formato obrigatório:
+        Regras de Entidades: Extraia locais, tempos, datas e ações cruciais. Se não houver, retorne {{}}.
+
+        EXEMPLOS DE COMPORTAMENTO:
+        
+        Usuário: "ALOY, me lembre de apagar as luzes da garagem daqui a 45 minutos"
         {{
-            "intent": "nome_da_intencao",
-            "confidence": 0.95
+            "intent": "set_reminder",
+            "confidence": 0.98,
+            "entities": {{"action": "apagar as luzes", "location": "garagem", "time": "45 minutos"}}
         }}
+        
+        Usuário: "liga a luz da sala"
+        {{
+            "intent": "turn_on_lights",
+            "confidence": 0.99,
+            "entities": {{"location": "sala"}}
+        }}
+        
+        Usuário: "bom dia aloy"
+        {{
+            "intent": "greeting",
+            "confidence": 0.99,
+            "entities": {{}}
+        }}
+
+        Agora é a sua vez. Analise a próxima mensagem e responda APENAS com o JSON válido.
         """
 
-        # Inicia o cronômetro
         start_time = time.perf_counter()
 
         try:
@@ -87,18 +108,16 @@ class GemmaEngine:
                 format='json'
             )
             
-            # Para o cronômetro
             end_time = time.perf_counter()
-            # Calcula o tempo em milissegundos
             processing_time_ms = round((end_time - start_time) * 1000, 2)
             
-            # Pega a resposta da IA
             llm_result = json.loads(response['message']['content'])
             
-            # Monta a resposta final enriquecida com os metadados do servidor
+            # Monta a resposta garantindo que o campo entities sempre exista
             final_response = {
                 "intent": llm_result.get("intent", "unknown"),
                 "confidence": llm_result.get("confidence", 0.0),
+                "entities": llm_result.get("entities", {}), # <- CAPTURANDO AS ENTIDADES
                 "metadata": {
                     "model": self.model_name,
                     "backend": "ollama",
@@ -111,7 +130,7 @@ class GemmaEngine:
             
         except json.JSONDecodeError:
             logger.error("O modelo não retornou um JSON válido.")
-            return {"intent": "unknown", "confidence": 0.0, "metadata": {"error": "Invalid JSON"}}
+            return {"intent": "unknown", "confidence": 0.0, "entities": {}, "metadata": {"error": "Invalid JSON"}}
         except Exception as e:
             logger.error(f"Erro ao extrair intenção: {e}")
             raise e

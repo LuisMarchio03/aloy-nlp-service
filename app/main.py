@@ -20,6 +20,7 @@ class IntentRequest(BaseModel):
 class IntentResponse(BaseModel):
     intent: str
     confidence: float
+    entities: Dict[str, Any] = {}
     metadata: Dict[str, Any]
 
 # ---- Endpoints ----
