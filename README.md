@@ -4,11 +4,11 @@
 
 ### **Inteligência Artificial Local e Privada com Google GEMMA**
 
-[! [ALOY NLP](https://img.shields.io/badge/ALOY-NLP%20Service-6A5ACD?style=for-the-badge&logo=google-cloud&logoColor=white)](https://github.com/LuisMarchio03/aloy-nlp-service)
-[! [Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org)
-[! [FastAPI](https://img.shields.io/badge/FastAPI-Latest-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
-[! [Model](https://img.shields.io/badge/Model-GEMMA--2B-7D4698?style=flat-square&logo=google-gemini&logoColor=white)](https://ai.google.dev/gemma)
-[! [Status](https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square)](https://github.com/LuisMarchio03/aloy-nlp-service)
+[![ALOY NLP](https://img.shields.io/badge/ALOY-NLP%20Service-6A5ACD?style=for-the-badge&logo=google-cloud&logoColor=white)](https://github.com/LuisMarchio03/aloy-nlp-service)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Latest-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Model](https://img.shields.io/badge/Model-GEMMA--2B-7D4698?style=flat-square&logo=google-gemini&logoColor=white)](https://ai.google.dev/gemma)
+[![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square)](https://github.com/LuisMarchio03/aloy-nlp-service)
 
 **[Recursos](#-recursos)** • **[Arquitetura](#-arquitetura)** • **[Instalação](#-instalação)** • **[Uso](#-começando)** • **[API](#-api-endpoints)** • **[Contribuir](#-contribuindo)**
 
