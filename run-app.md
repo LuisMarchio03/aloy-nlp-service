@@ -4,7 +4,7 @@ ollama run gemma:2b
 
 # Iniciar Ambiente Virtual - Python
 
-.\venv\Scripts\Activate.ps1
+\venv\Scripts\Activate.ps1
 
 # Rodar a Aplicação
 
