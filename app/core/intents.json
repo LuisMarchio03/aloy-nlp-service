@@ -1,0 +1,53 @@
+[
+    {
+        "intent": "turn_on_lights",
+        "description": "Ligar as luzes da casa ou de um cômodo específico.",
+        "examples": ["ligue as luzes", "acender a luz da sala", "ativar iluminação"],
+        "parameters": {
+            "room": "O cômodo onde a luz deve ser ligada (ex: sala, quarto)."
+        }
+    },
+    {
+        "intent": "turn_off_lights",
+        "description": "Desligar as luzes da casa ou de um cômodo específico.",
+        "examples": ["apague as luzes", "desligar a luz do quarto", "cortar iluminação"],
+        "parameters": {
+            "room": "O cômodo onde a luz deve ser desligada."
+        }
+    },
+    {
+        "intent": "set_reminder",
+        "description": "Agendar um lembrete para uma tarefa ou compromisso.",
+        "examples": ["me lembre de comprar pão", "criar lembrete para reunião às 15h", "avisar sobre o remédio"],
+        "parameters": {
+            "task": "A descrição da tarefa a ser lembrada.",
+            "time": "O horário ou momento do lembrete."
+        }
+    },
+    {
+        "intent": "web_search",
+        "description": "Realizar uma pesquisa na internet para obter informações.",
+        "examples": ["quem é o presidente do brasil?", "pesquise sobre carros elétricos", "buscar preço do bitcoin"],
+        "parameters": {
+            "query": "O termo ou pergunta a ser pesquisado."
+        }
+    },
+    {
+        "intent": "open_spotify",
+        "description": "Abrir o aplicativo do Spotify no sistema operacional.",
+        "examples": ["abrir spotify", "iniciar spotify", "tocar música no spotify"],
+        "parameters": {}
+    },
+    {
+        "intent": "greeting",
+        "description": "Saudações iniciais e apresentações.",
+        "examples": ["olá", "oi aloy", "bom dia", "quem é você?"],
+        "parameters": {}
+    },
+    {
+        "intent": "conversational",
+        "description": "Conversa casual, perguntas gerais ou interação sem comando específico.",
+        "examples": ["como você está?", "está chovendo hoje?", "me conte uma piada"],
+        "parameters": {}
+    }
+]

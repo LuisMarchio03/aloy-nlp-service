@@ -16,8 +16,8 @@ logger = logging.getLogger(__name__)
 
 # Instâncias dos serviços
 mq_client = RabbitMQClient()
-classifier = CognitiveClassifier(model_name="gemini-1.5-flash")
-engine = GeminiEngine(model_name="gemini-1.5-flash")
+classifier = CognitiveClassifier(model_name="gemini-2.5-flash")
+engine = GeminiEngine(model_name="gemini-2.5-flash")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -90,7 +90,7 @@ async def chat_endpoint(request: ChatRequest):
 
         # FASE 2: ROTEAMENTO (Dispatcher)
         # Intenções que devem ser tratadas como conversa natural
-        chat_intents = ["conversational", "unknown", "greeting"]
+        chat_intents = ["conversational", "unknown"]
         
         # Se for um comando (não chat) e tiver confiança alta
         if intent_name not in chat_intents and confidence >= 0.50:
